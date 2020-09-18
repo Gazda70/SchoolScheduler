@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/editDay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/margin_64"
+    android:layout_marginEnd="@dimen/margin_64"
+    android:background="@color/cardview_light_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/editDayField"
+        android:layout_width="match_parent"
+        android:layout_height="129dp"
+        android:background="@drawable/clickable_element"
+        android:gravity="center"
+        android:text="@string/day"
+        android:textAlignment="gravity"
+        android:textSize="@dimen/size_48sp" />
+
+
+</LinearLayout>
