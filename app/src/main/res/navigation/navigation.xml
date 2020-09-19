@@ -12,16 +12,16 @@
         tools:layout="@layout/fragment_sequential_schedule_list" >
         <action
             android:id="@+id/action_sequentialScheduleFragment_to_tableScheduleFragment"
-            app:destination="@id/tableScheduleFragment" />
+            app:destination="@id/tableFragmentSchedule" />
         <action
-            android:id="@+id/action_sequentialScheduleFragment_to_dayManagementFragment2"
-            app:destination="@id/dayManagementFragment2" />
+            android:id="@+id/action_sequentialScheduleFragment_to_dayManagementFragmentFragment"
+            app:destination="@id/dayManagementFragmentFragment" />
     </fragment>
     <fragment
-        android:id="@+id/tableScheduleFragment"
-        android:name="com.example.schoolscheduler.TableSchedule.ScheduleFragment"
-        android:label="table_schedule_fragment"
-        tools:layout="@layout/table_schedule_fragment" >
+        android:id="@+id/tableFragmentSchedule"
+        android:name="com.example.schoolscheduler.TableSchedule.TableScheduleFragment"
+        android:label="table_fragment_schedule"
+        tools:layout="@layout/table_fragment_schedule">
         <action
             android:id="@+id/action_tableScheduleFragment_to_sequentialScheduleFragment"
             app:destination="@id/sequentialScheduleFragment" />
@@ -30,17 +30,12 @@
             app:destination="@id/rowEditionFragment" />
     </fragment>
     <fragment
-        android:id="@+id/dayManagementFragment2"
-        android:name="com.example.schoolscheduler.DayManagement.DayManagementFragment"
-        android:label="day_management_fragment"
-        tools:layout="@layout/day_management_fragment" />
-    <fragment
         android:id="@+id/startFragment"
         android:name="com.example.schoolscheduler.Start.StartFragment"
         android:label="StartFragment" >
         <action
             android:id="@+id/action_startFragment_to_tableScheduleFragment2"
-            app:destination="@id/tableScheduleFragment" />
+            app:destination="@id/tableFragmentSchedule" />
         <action
             android:id="@+id/action_startFragment_to_sequentialScheduleFragment"
             app:destination="@id/sequentialScheduleFragment" />
@@ -50,4 +45,9 @@
         android:name="com.example.schoolscheduler.RowEditionFragment"
         android:label="row_edition_fragment"
         tools:layout="@layout/row_edition_fragment" />
+    <fragment
+        android:id="@+id/dayManagementFragmentFragment"
+        android:name="com.example.schoolscheduler.DayManagement.DayManagementFragment"
+        android:label="fragment_item_list"
+        tools:layout="@layout/day_fragment_item_list" />
 </navigation>

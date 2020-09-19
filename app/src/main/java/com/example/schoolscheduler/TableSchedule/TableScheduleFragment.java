@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,36 +16,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextClock;
-import android.widget.TextView;
 
 import com.example.schoolscheduler.R;
 
-import com.example.schoolscheduler.databinding.FragmentScheduleBinding;
-
-import java.util.Objects;
+import com.example.schoolscheduler.databinding.TableFragmentScheduleBinding;
 
 
-public class ScheduleFragment extends Fragment {
+public class TableScheduleFragment extends Fragment {
 
-    private ScheduleViewModel mViewModel;
+    private TableScheduleViewModel mViewModel;
 
-    private FragmentScheduleBinding binding;
+    private TableFragmentScheduleBinding binding;
 
     private Context myContext ;
 
 
-    public static ScheduleFragment newInstance() {
-        return new ScheduleFragment();
+    public static TableScheduleFragment newInstance() {
+        return new TableScheduleFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_schedule,container, false);
-        mViewModel = new ViewModelProvider(this).get(ScheduleViewModel.class);
+        binding = DataBindingUtil.inflate(inflater, R.layout.table_fragment_schedule,container, false);
+        mViewModel = new ViewModelProvider(this).get(TableScheduleViewModel.class);
         myContext= this.getContext();
 
         final Observer<Boolean> rowAddedObserver = new Observer<Boolean>() {
@@ -76,7 +69,7 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ScheduleViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(TableScheduleViewModel.class);
         // TODO: Use the ViewModel
     }
 

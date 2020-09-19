@@ -6,8 +6,8 @@ import androidx.recyclerview.selection.ItemKeyProvider;
 
 public class MyItemKeyProvider extends ItemKeyProvider<String> {
 
-    private MyItemRecyclerViewAdapter adapter;
-    public MyItemKeyProvider(MyItemRecyclerViewAdapter newAdapter){
+    private SequentialScheduleRecyclerViewAdapter adapter;
+    public MyItemKeyProvider(SequentialScheduleRecyclerViewAdapter newAdapter){
         super(SCOPE_CACHED);
         adapter = newAdapter;
     };

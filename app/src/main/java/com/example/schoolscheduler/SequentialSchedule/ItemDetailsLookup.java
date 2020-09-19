@@ -20,9 +20,9 @@ public class ItemDetailsLookup extends
         View view = myRecyclerView.findChildViewUnder(event.getX(),event.getY());
         if(view != null){
              RecyclerView.ViewHolder viewHolder = myRecyclerView.getChildViewHolder(view);
-             if(viewHolder instanceof MyItemRecyclerViewAdapter.DayViewHolder)
+             if(viewHolder instanceof SequentialScheduleRecyclerViewAdapter.DayViewHolder)
              {
-                 return ((MyItemRecyclerViewAdapter.DayViewHolder)viewHolder).getItemDetails();
+                 return ((SequentialScheduleRecyclerViewAdapter.DayViewHolder)viewHolder).getItemDetails();
              }
         }
         return null;

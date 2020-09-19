@@ -4,12 +4,16 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.util.List;
-
 @Entity(tableName = "table_schedule")
 public class Lesson {
+
+    public Lesson(int activityId, String activityName, String activityDay, String activityDuration){
+        this.activityId = activityId;
+        this.activityName = activityName;
+        this.activityDay = activityDay;
+        this.activityDuration = activityDuration;
+    }
+
     @PrimaryKey
     public int activityId;
 

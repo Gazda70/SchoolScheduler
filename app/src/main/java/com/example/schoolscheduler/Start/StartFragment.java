@@ -70,14 +70,13 @@ public class StartFragment extends Fragment {
         });
 
 
-
             // observe goDays LiveData
         final Observer<Boolean> goDaysObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable final Boolean newValue) {
                 if (newValue) {
+                    mViewModel.setFalseGoDays();
                     navigateToDays();
-                    Log.i("Start!", "ZAOBSERWOWANO DAYS BUTTON AKTYWNY");
                 }
             }
         };
@@ -87,6 +86,7 @@ public class StartFragment extends Fragment {
         binding.daysButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("START", "GO DAYS");
                 mViewModel.setTrueGoDays();;
             }
         });
@@ -106,8 +106,6 @@ public class StartFragment extends Fragment {
     }
 
     private void navigateToDays(){
-        mViewModel.setFalseGoDays();
         NavHostFragment.findNavController(this).navigate(R.id.action_startFragment_to_sequentialScheduleFragment);
-        Log.i("StartFragment", "PODRÓŻ!");
     }
 }

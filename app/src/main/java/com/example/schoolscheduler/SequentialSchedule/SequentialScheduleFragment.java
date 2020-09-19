@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.selection.ItemKeyProvider;
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
@@ -20,7 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.schoolscheduler.SequentialSchedule.MyItemRecyclerViewAdapter;
+import com.example.schoolscheduler.SequentialSchedule.SequentialScheduleRecyclerViewAdapter;
 import com.example.schoolscheduler.R;
 import com.example.schoolscheduler.dummy.DummyContent;
 
@@ -38,7 +39,9 @@ public class SequentialScheduleFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    private MyItemRecyclerViewAdapter adapter;
+    private SequentialScheduleRecyclerViewAdapter adapter;
+
+    private SelectionTracker<String> tracker;
     private final List<String> weekdays = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
     /**
@@ -72,7 +75,7 @@ public class SequentialScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sequential_schedule_list, container, false);
 
-        adapter = new MyItemRecyclerViewAdapter(weekdays);
+        adapter = new SequentialScheduleRecyclerViewAdapter(weekdays);
 
 
         // Set the adapter
@@ -85,14 +88,22 @@ public class SequentialScheduleFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(adapter);
-            adapter.setTracker(getMySpecificTracker(recyclerView));
+            tracker = getMySpecificTracker(recyclerView);
+            adapter.setTracker(tracker);
         }
+
+        tracker.addObserver(new SelectionTracker.SelectionObserver<String>(){
+            @Override
+            public void onSelectionChanged(){
+                navigateToDayManagementFragment();
+            }
+        });
         return view;
     }
 
     private SelectionTracker<String> getMySpecificTracker(RecyclerView recyclerView){
         return new SelectionTracker.Builder<>(
-                "my-selection-id",
+                "sequential_schedule_selection",
                 recyclerView,
                 new MyItemKeyProvider(adapter),
                 new ItemDetailsLookup(recyclerView),
@@ -101,5 +112,9 @@ public class SequentialScheduleFragment extends Fragment {
                         SelectionPredicates.<String>createSelectAnything()
                 )
                 .build();
+    }
+
+    private void navigateToDayManagementFragment(){
+        NavHostFragment.findNavController(this).navigate(R.id.action_sequentialScheduleFragment_to_dayManagementFragmentFragment);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.schoolscheduler.SequentialSchedule;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +21,11 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.DayViewHolder> {
+public class SequentialScheduleRecyclerViewAdapter extends RecyclerView.Adapter<SequentialScheduleRecyclerViewAdapter.DayViewHolder> {
 
     private final List<String> mValues;
+
+    private final int parentMeasuredHeightDivisor = 4;
 
     @Nullable
     private SelectionTracker<String> tracker;
@@ -39,15 +42,16 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
        return mValues.indexOf(key);
    }
 
-    public MyItemRecyclerViewAdapter(List<String> items) {mValues = items;}
+    public SequentialScheduleRecyclerViewAdapter(List<String> items) {mValues = items;}
 
+    @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_sequential_schedule, parent, false);
 
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)view.getLayoutParams();
-        params.height = parent.getMeasuredHeight() / 4;
+        params.height = parent.getMeasuredHeight() / parentMeasuredHeightDivisor;
         view.setLayoutParams(params);
         return new DayViewHolder(view);
     }
@@ -69,7 +73,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return mValues.size();
     }
 
-    public class DayViewHolder extends RecyclerView.ViewHolder {
+    public static class DayViewHolder extends RecyclerView.ViewHolder {
         public final TextView dayNameField;
 
         public DayViewHolder(View view) {
@@ -77,6 +81,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             dayNameField = (TextView) view.findViewById(R.id.editDayField);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return super.toString() + " '" + dayNameField.getText() + "'";
@@ -90,7 +95,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     return getAdapterPosition();
                 }
 
-                @Nullable
+                @NonNull
                 @Override
                 public String getSelectionKey() {
                     return dayNameField.getText().toString();

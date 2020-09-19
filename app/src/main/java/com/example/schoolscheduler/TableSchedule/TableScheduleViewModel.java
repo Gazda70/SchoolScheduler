@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.schoolscheduler.R;
 
-public class ScheduleViewModel extends ViewModel {
+public class TableScheduleViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 
     private final int columnsNumber = 6;

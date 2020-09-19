@@ -5,7 +5,7 @@
     >
     <data class="StartFragmentBinding">
 
-    </data>
+</data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
