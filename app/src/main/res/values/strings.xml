@@ -17,4 +17,6 @@
     <string name="hours">Hours</string>
     <string name="day">Day</string>
     <string name="add">ADD</string>
-</resources>
+    <string name="deleted_lesson">Lesson deleted!</string>
+    <string name="undo">Undo</string>
+    </resources>

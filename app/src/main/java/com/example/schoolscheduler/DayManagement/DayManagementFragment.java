@@ -1,10 +1,12 @@
 package com.example.schoolscheduler.DayManagement;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -15,6 +17,7 @@ import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StableIdKeyProvider;
 import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +38,7 @@ import com.example.schoolscheduler.dummy.DummyContent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A fragment representing a list of Items.
@@ -54,8 +58,13 @@ public class DayManagementFragment extends Fragment {
 
     private SelectionTracker<Long> tracker;
 
+    private RecyclerView recyclerView;
+
+    private View view;
+
     //TEMPORARY SOLUTION
     private int newLessonIndex;
+
 
 
     /**
@@ -87,7 +96,7 @@ public class DayManagementFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.day_fragment_item_list, container, false);
+        view = inflater.inflate(R.layout.day_fragment_item_list, container, false);
 
         viewModel  = new ViewModelProvider(this).get(DayManagementViewModel.class);
 
@@ -99,19 +108,7 @@ public class DayManagementFragment extends Fragment {
 
         viewModel.getAddLesson().setValue(false);
 
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.lesson_list);
-
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-
-            recyclerView.setAdapter(adapter);
-            tracker = getMySpecificTracker(recyclerView);
-            adapter.setTracker(tracker);
-
+        setUpRecyclerView();
 
         // observe addLesson LiveData
         final Observer<Boolean> addLessonObserver = new Observer<Boolean>() {
@@ -143,7 +140,7 @@ public class DayManagementFragment extends Fragment {
         return new SelectionTracker.Builder<>(
                 "day_management_selection",
                 recyclerView,
-                new StableIdKeyProvider(recyclerView),
+                new CustomLongKeyProvider(recyclerView),
                 new  MyItemDetailsLookup(recyclerView) ,
                 StorageStrategy.createLongStorage())
                 .withSelectionPredicate(
@@ -158,4 +155,29 @@ public class DayManagementFragment extends Fragment {
         adapter.notifyItemInserted(newLessonIndex);
         newLessonIndex++;
     }
+
+    private void setUpRecyclerView() {
+        recyclerView = (RecyclerView) view.findViewById(R.id.lesson_list);
+
+        determineLayoutManager();
+        recyclerView.setAdapter(adapter);
+        tracker = getMySpecificTracker(recyclerView);
+        adapter.setTracker(tracker);
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getContext(),adapter, recyclerView);
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(swipeToDeleteCallback);
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private void determineLayoutManager(){
+        Context context = view.getContext();
+        if (mColumnCount <= 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        }
+
+    }
+
 }

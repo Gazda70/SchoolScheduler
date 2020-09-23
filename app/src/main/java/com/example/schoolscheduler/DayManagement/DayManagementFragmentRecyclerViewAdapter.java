@@ -5,6 +5,8 @@ import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.example.schoolscheduler.R;
 import com.example.schoolscheduler.database.Lesson;
 import com.example.schoolscheduler.dummy.DummyContent.DummyItem;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,10 +33,12 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
 
     private SelectionTracker<Long> tracker;
 
-    public DayManagementFragmentRecyclerViewAdapter(List<Lesson> toAssign) {
+    private Lesson recentlyDeletedItem;
 
+    private int recentlyDeletedItemPosition;
+
+    public DayManagementFragmentRecyclerViewAdapter(List<Lesson> toAssign) {
         mValues = toAssign;
-        setHasStableIds(true);
     }
 
     @Override
@@ -57,6 +62,26 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
         return new LessonsViewHolder(view);
     }
 
+    public void onItemRemove(final RecyclerView.ViewHolder viewHolder, final RecyclerView recyclerView){
+        final int adapterPosition = viewHolder.getAdapterPosition();
+        final Lesson mLesson = mValues.get(adapterPosition);
+        Snackbar snackbar = Snackbar
+                .make(recyclerView, "PHOTO REMOVED", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //int mAdapterPosition = viewHolder.getAdapterPosition();
+                        Log.i("ADAPTER POSITION", String.valueOf((char)(adapterPosition)));
+                        mValues.add(adapterPosition, mLesson);
+                        notifyItemInserted(adapterPosition);
+                        recyclerView.scrollToPosition(adapterPosition);
+                    }
+                });
+        snackbar.show();
+        mValues.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
+    }
+
     @Override
     public void onBindViewHolder(final LessonsViewHolder holder, int position) {
         boolean isSelected = false;
@@ -67,6 +92,31 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
         }
         holder.bind(lessonName, lessonDuration, isSelected);
     }
+
+    /*
+    public void deleteItem(int position) {
+        recentlyDeletedItem = mValues.get(position);
+        recentlyDeletedItemPosition = position;
+        mValues.remove(position);
+        notifyItemRemoved(position);
+        showUndoSnackbar();
+    }
+
+    private void showUndoSnackbar() {
+        View view = activity.findViewById(R.id.show_lesson);
+        Snackbar snackbar = Snackbar.make(view, R.string.deleted_lesson,
+                Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mValues.add(recentlyDeletedItemPosition,
+                        recentlyDeletedItem);
+                notifyItemInserted(recentlyDeletedItemPosition);
+                Log.i("SNACKBAR", "UNDO DELETE");
+            }
+        });
+        snackbar.show();
+    }*/
 
     @Override
     public int getItemCount() {
