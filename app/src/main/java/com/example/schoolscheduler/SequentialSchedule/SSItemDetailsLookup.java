@@ -7,12 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemDetailsLookup extends
+public class SSItemDetailsLookup extends
         androidx.recyclerview.selection.ItemDetailsLookup<String> {
 
     private RecyclerView myRecyclerView;
 
-    public ItemDetailsLookup(RecyclerView toAssign){myRecyclerView = toAssign;}
+    public SSItemDetailsLookup(RecyclerView toAssign){myRecyclerView = toAssign;}
 
     @Override
    public @Nullable

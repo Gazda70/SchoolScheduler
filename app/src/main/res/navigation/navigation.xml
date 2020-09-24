@@ -25,9 +25,6 @@
         <action
             android:id="@+id/action_tableScheduleFragment_to_sequentialScheduleFragment"
             app:destination="@id/sequentialScheduleFragment" />
-        <action
-            android:id="@+id/action_tableScheduleFragment_to_rowEditionFragment"
-            app:destination="@id/rowEditionFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -41,13 +38,17 @@
             app:destination="@id/sequentialScheduleFragment" />
     </fragment>
     <fragment
-        android:id="@+id/rowEditionFragment"
-        android:name="com.example.schoolscheduler.RowEditionFragment"
-        android:label="row_edition_fragment"
-        tools:layout="@layout/row_edition_fragment" />
-    <fragment
         android:id="@+id/dayManagementFragmentFragment"
         android:name="com.example.schoolscheduler.DayManagement.DayManagementFragment"
         android:label="fragment_item_list"
-        tools:layout="@layout/day_fragment_item_list" />
+        tools:layout="@layout/day_fragment_item_list" >
+        <action
+            android:id="@+id/action_dayManagementFragmentFragment_to_lessonManagementFragment2"
+            app:destination="@id/lessonManagementFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/lessonManagementFragment2"
+        android:name="com.example.schoolscheduler.LessonManagementFragment"
+        android:label="fragment_lesson_management_list"
+        tools:layout="@layout/fragment_lesson_management_list" />
 </navigation>

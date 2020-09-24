@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.schoolscheduler.R;
 
 
-public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
+public class DMSwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
     private DayManagementFragmentRecyclerViewAdapter mAdapter;
 
@@ -30,10 +30,8 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private final ColorDrawable background;
 
 
-    public SwipeToDeleteCallback(Context context, DayManagementFragmentRecyclerViewAdapter adapter, RecyclerView recyclerView) {
+    public DMSwipeToDeleteCallback(Context context, DayManagementFragmentRecyclerViewAdapter adapter, RecyclerView recyclerView) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        Log.i("SWIPE TO DELETE", "CALLBACK!");
-
         mRecyclerView = recyclerView;
         mAdapter = adapter;
             icon = ContextCompat.getDrawable(context, R.drawable.ic_delete_24px);

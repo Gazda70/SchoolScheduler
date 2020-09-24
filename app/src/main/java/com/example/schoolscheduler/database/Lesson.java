@@ -7,22 +7,22 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "table_schedule")
 public class Lesson {
 
-    public Lesson(int activityId, String activityName, String activityDay, String activityDuration){
-        this.activityId = activityId;
-        this.activityName = activityName;
-        this.activityDay = activityDay;
-        this.activityDuration = activityDuration;
+    public Lesson(int lessonId, String lessonName, String lessonDay, String lessonDuration){
+        this.lessonId = lessonId;
+        this.lessonName = lessonName;
+        this.lessonDay = lessonDay;
+        this.lessonDuration = lessonDuration;
     }
 
     @PrimaryKey
-    public int activityId;
+    public int lessonId;
 
     @ColumnInfo
-    public String activityName;
+    public String lessonName;
 
     @ColumnInfo
-    public String activityDay;
+    public String lessonDay;
 
     @ColumnInfo
-    public String activityDuration;
+    public String lessonDuration;
 }

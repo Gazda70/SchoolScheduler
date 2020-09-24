@@ -25,8 +25,6 @@ public class SequentialScheduleRecyclerViewAdapter extends RecyclerView.Adapter<
 
     private final List<String> mValues;
 
-    private final int parentMeasuredHeightDivisor = 4;
-
     @Nullable
     private SelectionTracker<String> tracker;
 
@@ -51,6 +49,7 @@ public class SequentialScheduleRecyclerViewAdapter extends RecyclerView.Adapter<
                 .inflate(R.layout.fragment_sequential_schedule, parent, false);
 
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)view.getLayoutParams();
+        int parentMeasuredHeightDivisor = 4;
         params.height = parent.getMeasuredHeight() / parentMeasuredHeightDivisor;
         view.setLayoutParams(params);
         return new DayViewHolder(view);
@@ -88,7 +87,7 @@ public class SequentialScheduleRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
 
-         ItemDetailsLookup.ItemDetails<String> getItemDetails(){
+         SSItemDetailsLookup.ItemDetails<String> getItemDetails(){
             return new androidx.recyclerview.selection.ItemDetailsLookup.ItemDetails<String>() {
                 @Override
                 public int getPosition() {

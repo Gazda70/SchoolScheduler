@@ -105,8 +105,8 @@ public class SequentialScheduleFragment extends Fragment {
         return new SelectionTracker.Builder<>(
                 "sequential_schedule_selection",
                 recyclerView,
-                new MyItemKeyProvider(adapter),
-                new ItemDetailsLookup(recyclerView),
+                new SSItemKeyProvider(adapter),
+                new SSItemDetailsLookup(recyclerView),
                 StorageStrategy.createStringStorage())
                 .withSelectionPredicate(
                         SelectionPredicates.<String>createSelectAnything()

@@ -19,4 +19,5 @@
     <string name="add">ADD</string>
     <string name="deleted_lesson">Lesson deleted!</string>
     <string name="undo">Undo</string>
-    </resources>
+    <string name="enter_name_of_new_equipment_item">Enter name of new equipment item</string>
+</resources>

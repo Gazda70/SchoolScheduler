@@ -29,16 +29,11 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
 
     private final List<Lesson> mValues;
 
-    private final int parentMeasuredHeightDivisor = 5;
-
     private SelectionTracker<Long> tracker;
 
-    private Lesson recentlyDeletedItem;
-
-    private int recentlyDeletedItemPosition;
-
     public DayManagementFragmentRecyclerViewAdapter(List<Lesson> toAssign) {
-        mValues = toAssign;
+        super();
+        this.mValues = toAssign;
     }
 
     @Override
@@ -56,6 +51,7 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
                 .inflate(R.layout.day_fragment_item, parent, false);
 
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)view.getLayoutParams();
+        int parentMeasuredHeightDivisor = 5;
         params.height = parent.getMeasuredHeight() / parentMeasuredHeightDivisor;
         view.setLayoutParams(params);
 
@@ -66,12 +62,10 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
         final int adapterPosition = viewHolder.getAdapterPosition();
         final Lesson mLesson = mValues.get(adapterPosition);
         Snackbar snackbar = Snackbar
-                .make(recyclerView, "PHOTO REMOVED", Snackbar.LENGTH_LONG)
+                .make(recyclerView, "LESSON REMOVED", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //int mAdapterPosition = viewHolder.getAdapterPosition();
-                        Log.i("ADAPTER POSITION", String.valueOf((char)(adapterPosition)));
                         mValues.add(adapterPosition, mLesson);
                         notifyItemInserted(adapterPosition);
                         recyclerView.scrollToPosition(adapterPosition);
@@ -85,38 +79,13 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
     @Override
     public void onBindViewHolder(final LessonsViewHolder holder, int position) {
         boolean isSelected = false;
-        String lessonName = mValues.get(position).activityName;
-        String lessonDuration = mValues.get(position).activityDuration;
+        String lessonName = mValues.get(position).lessonName;
+        String lessonDuration = mValues.get(position).lessonDuration;
         if(tracker != null) {
             isSelected = tracker.isSelected((long)position);
         }
         holder.bind(lessonName, lessonDuration, isSelected);
     }
-
-    /*
-    public void deleteItem(int position) {
-        recentlyDeletedItem = mValues.get(position);
-        recentlyDeletedItemPosition = position;
-        mValues.remove(position);
-        notifyItemRemoved(position);
-        showUndoSnackbar();
-    }
-
-    private void showUndoSnackbar() {
-        View view = activity.findViewById(R.id.show_lesson);
-        Snackbar snackbar = Snackbar.make(view, R.string.deleted_lesson,
-                Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mValues.add(recentlyDeletedItemPosition,
-                        recentlyDeletedItem);
-                notifyItemInserted(recentlyDeletedItemPosition);
-                Log.i("SNACKBAR", "UNDO DELETE");
-            }
-        });
-        snackbar.show();
-    }*/
 
     @Override
     public int getItemCount() {

@@ -1,44 +1,28 @@
 package com.example.schoolscheduler.DayManagement;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
-import androidx.recyclerview.selection.StableIdKeyProvider;
 import androidx.recyclerview.selection.StorageStrategy;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 
 import com.example.schoolscheduler.R;
-import com.example.schoolscheduler.SequentialSchedule.MyItemKeyProvider;
-import com.example.schoolscheduler.Start.StartViewModel;
 import com.example.schoolscheduler.database.Lesson;
-import com.example.schoolscheduler.dummy.DummyContent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * A fragment representing a list of Items.
@@ -56,12 +40,9 @@ public class DayManagementFragment extends Fragment {
 
     private DayManagementFragmentRecyclerViewAdapter adapter;
 
-    private SelectionTracker<Long> tracker;
-
-    private RecyclerView recyclerView;
-
     private View view;
 
+    private SelectionTracker<Long> tracker;
     //TEMPORARY SOLUTION
     private int newLessonIndex;
 
@@ -74,8 +55,6 @@ public class DayManagementFragment extends Fragment {
     public DayManagementFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static DayManagementFragment newInstance(int columnCount) {
         DayManagementFragment fragment = new DayManagementFragment();
         Bundle args = new Bundle();
@@ -87,7 +66,6 @@ public class DayManagementFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -100,11 +78,11 @@ public class DayManagementFragment extends Fragment {
 
         viewModel  = new ViewModelProvider(this).get(DayManagementViewModel.class);
 
+        adapter = new DayManagementFragmentRecyclerViewAdapter(mValues);
+
         viewModel.getLessonsFromDatabase(mValues);
 
         newLessonIndex = mValues.size() + 1;
-
-        adapter = new DayManagementFragmentRecyclerViewAdapter(mValues);
 
         viewModel.getAddLesson().setValue(false);
 
@@ -128,11 +106,15 @@ public class DayManagementFragment extends Fragment {
         addLessonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ADD LESSON", "KLIKNIĘTO");
                 viewModel.setTrueAddLesson();
             }
         });
 
+        /*tracker.addObserver(new SelectionTracker.SelectionObserver<String>(){
+            @Override
+            public void onSelectionChanged(){
+                navigateToLessonManagementFragment();}
+        });*/
         return view;
     }
 
@@ -140,8 +122,8 @@ public class DayManagementFragment extends Fragment {
         return new SelectionTracker.Builder<>(
                 "day_management_selection",
                 recyclerView,
-                new CustomLongKeyProvider(recyclerView),
-                new  MyItemDetailsLookup(recyclerView) ,
+                new DMLongKeyProvider(recyclerView),
+                new  DMItemDetailsLookup(recyclerView) ,
                 StorageStrategy.createLongStorage())
                 .withSelectionPredicate(
                         SelectionPredicates.<Long>createSelectAnything()
@@ -150,34 +132,26 @@ public class DayManagementFragment extends Fragment {
     }
 
     private void addLesson(){
-        Log.i("ADD LESSON", "DODAJĘ GEOGRAFIĘ");
         mValues.add(new Lesson(newLessonIndex,"Geografia","Poniedziałek","13:40 - 14:25"));
         adapter.notifyItemInserted(newLessonIndex);
         newLessonIndex++;
     }
 
     private void setUpRecyclerView() {
-        recyclerView = (RecyclerView) view.findViewById(R.id.lesson_list);
 
-        determineLayoutManager();
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.lesson_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
         tracker = getMySpecificTracker(recyclerView);
         adapter.setTracker(tracker);
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getContext(),adapter, recyclerView);
+        DMSwipeToDeleteCallback swipeToDeleteCallback = new DMSwipeToDeleteCallback(getContext(),adapter, recyclerView);
         ItemTouchHelper itemTouchHelper = new
                 ItemTouchHelper(swipeToDeleteCallback);
-
         itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    private void determineLayoutManager(){
-        Context context = view.getContext();
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-        }
 
     }
 
+    private void navigateToLessonManagementFragment(){
+        NavHostFragment.findNavController(this).navigate(R.id.action_dayManagementFragmentFragment_to_lessonManagementFragment2);
+    }
 }

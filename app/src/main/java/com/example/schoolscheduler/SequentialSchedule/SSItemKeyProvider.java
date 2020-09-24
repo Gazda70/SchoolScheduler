@@ -4,11 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemKeyProvider;
 
-public class MyItemKeyProvider extends ItemKeyProvider<String> {
+public class SSItemKeyProvider extends ItemKeyProvider<String> {
 
     private SequentialScheduleRecyclerViewAdapter adapter;
-    public MyItemKeyProvider(SequentialScheduleRecyclerViewAdapter newAdapter){
-        super(SCOPE_CACHED);
+    public SSItemKeyProvider(SequentialScheduleRecyclerViewAdapter newAdapter){
+        super(SCOPE_MAPPED);
         adapter = newAdapter;
     };
 
