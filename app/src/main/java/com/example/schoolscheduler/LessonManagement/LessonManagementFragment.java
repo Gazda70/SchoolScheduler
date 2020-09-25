@@ -1,4 +1,4 @@
-package com.example.schoolscheduler;
+package com.example.schoolscheduler.LessonManagement;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.schoolscheduler.R;
+import com.example.schoolscheduler.database.Equipment;
 import com.example.schoolscheduler.dummy.DummyContent;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -64,7 +68,7 @@ public class LessonManagementFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyEquipmentRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new LessonManagementRecyclerViewAdapter(new ArrayList<Equipment>()));
         }
         return view;
     }

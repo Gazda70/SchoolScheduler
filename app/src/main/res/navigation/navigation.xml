@@ -11,11 +11,9 @@
         android:label="fragment_sequential_schedule_list"
         tools:layout="@layout/fragment_sequential_schedule_list" >
         <action
-            android:id="@+id/action_sequentialScheduleFragment_to_tableScheduleFragment"
-            app:destination="@id/tableFragmentSchedule" />
-        <action
             android:id="@+id/action_sequentialScheduleFragment_to_dayManagementFragmentFragment"
-            app:destination="@id/dayManagementFragmentFragment" />
+            app:destination="@id/dayManagementFragmentFragment"
+            app:popUpTo="@id/sequentialScheduleFragment" />
     </fragment>
     <fragment
         android:id="@+id/tableFragmentSchedule"
@@ -24,7 +22,8 @@
         tools:layout="@layout/table_fragment_schedule">
         <action
             android:id="@+id/action_tableScheduleFragment_to_sequentialScheduleFragment"
-            app:destination="@id/sequentialScheduleFragment" />
+            app:destination="@id/sequentialScheduleFragment"
+            app:popUpTo="@id/tableFragmentSchedule" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -32,10 +31,12 @@
         android:label="StartFragment" >
         <action
             android:id="@+id/action_startFragment_to_tableScheduleFragment2"
-            app:destination="@id/tableFragmentSchedule" />
+            app:destination="@id/tableFragmentSchedule"
+            app:popUpTo="@id/startFragment" />
         <action
             android:id="@+id/action_startFragment_to_sequentialScheduleFragment"
-            app:destination="@id/sequentialScheduleFragment" />
+            app:destination="@id/sequentialScheduleFragment"
+            app:popUpTo="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/dayManagementFragmentFragment"
@@ -44,11 +45,12 @@
         tools:layout="@layout/day_fragment_item_list" >
         <action
             android:id="@+id/action_dayManagementFragmentFragment_to_lessonManagementFragment2"
-            app:destination="@id/lessonManagementFragment2" />
+            app:destination="@id/lessonManagementFragment2"
+            app:popUpTo="@id/dayManagementFragmentFragment" />
     </fragment>
     <fragment
         android:id="@+id/lessonManagementFragment2"
-        android:name="com.example.schoolscheduler.LessonManagementFragment"
+        android:name="com.example.schoolscheduler.LessonManagement.LessonManagementFragment"
         android:label="fragment_lesson_management_list"
         tools:layout="@layout/fragment_lesson_management_list" />
 </navigation>

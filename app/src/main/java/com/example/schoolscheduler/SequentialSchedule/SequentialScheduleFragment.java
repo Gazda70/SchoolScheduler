@@ -115,6 +115,6 @@ public class SequentialScheduleFragment extends Fragment {
     }
 
     private void navigateToDayManagementFragment(){
-        NavHostFragment.findNavController(this).navigate(R.id.action_sequentialScheduleFragment_to_dayManagementFragmentFragment);
+            NavHostFragment.findNavController(this).navigate(R.id.action_sequentialScheduleFragment_to_dayManagementFragmentFragment);
     }
 }

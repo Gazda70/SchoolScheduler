@@ -110,11 +110,11 @@ public class DayManagementFragment extends Fragment {
             }
         });
 
-        /*tracker.addObserver(new SelectionTracker.SelectionObserver<String>(){
+        tracker.addObserver(new SelectionTracker.SelectionObserver<String>(){
             @Override
             public void onSelectionChanged(){
                 navigateToLessonManagementFragment();}
-        });*/
+        });
         return view;
     }
 
@@ -152,6 +152,6 @@ public class DayManagementFragment extends Fragment {
     }
 
     private void navigateToLessonManagementFragment(){
-        NavHostFragment.findNavController(this).navigate(R.id.action_dayManagementFragmentFragment_to_lessonManagementFragment2);
+            NavHostFragment.findNavController(this).navigate(R.id.action_dayManagementFragmentFragment_to_lessonManagementFragment2);
     }
 }

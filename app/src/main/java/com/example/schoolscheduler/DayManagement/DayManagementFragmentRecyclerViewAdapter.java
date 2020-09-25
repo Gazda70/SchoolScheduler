@@ -34,11 +34,12 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
     public DayManagementFragmentRecyclerViewAdapter(List<Lesson> toAssign) {
         super();
         this.mValues = toAssign;
+        setHasStableIds(true);
     }
 
     @Override
     public long getItemId(int position){
-        return (long)position;
+        return (long)mValues.get(position).lessonId;
     }
 
     public void setTracker(SelectionTracker<Long> newTracker){

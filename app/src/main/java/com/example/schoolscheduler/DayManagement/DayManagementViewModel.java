@@ -27,11 +27,14 @@ public class DayManagementViewModel extends ViewModel {
 
     public void getLessonsFromDatabase(ArrayList<Lesson> toPopulate){
 
-        toPopulate.add(new Lesson(1,"Matematyka","Poniedziałek", "8:00 - 8:45"));
-        toPopulate.add(new Lesson(2,"J.polski","Poniedziałek", "8:55 - 9:40"));
+        if(toPopulate.isEmpty())
+        {
+            toPopulate.add(new Lesson(1,"Matematyka","Poniedziałek", "8:00 - 8:45"));
+        }
+       /* toPopulate.add(new Lesson(2,"J.polski","Poniedziałek", "8:55 - 9:40"));
         toPopulate.add(new Lesson(3,"J.polski","Poniedziałek", "9:50 - 10:35"));
         toPopulate.add(new Lesson(4,"Fizyka","Poniedziałek", "10:50 - 11:35"));
         toPopulate.add(new Lesson(5,"Chemia","Poniedziałek", "11:45 - 12:30"));
-        toPopulate.add(new Lesson(6,"Informatyka","Poniedziałek", "12:40 - 13:25"));
+        toPopulate.add(new Lesson(6,"Informatyka","Poniedziałek", "12:40 - 13:25"));*/
     }
 }
