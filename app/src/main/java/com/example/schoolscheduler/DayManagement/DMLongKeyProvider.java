@@ -22,13 +22,10 @@ public class DMLongKeyProvider extends ItemKeyProvider<Long> {
     @Override
         public int getPosition(Long key){
             RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(key);
-            int position = 0;
+            int position = RecyclerView.NO_POSITION;
            if(viewHolder != null) {
                 position = viewHolder.getLayoutPosition();
-            }else {
-                position = RecyclerView.NO_POSITION;
             }
-
             return position;
         }
     }

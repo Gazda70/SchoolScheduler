@@ -80,12 +80,10 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
     @Override
     public void onBindViewHolder(final LessonsViewHolder holder, int position) {
         boolean isSelected = false;
-        String lessonName = mValues.get(position).lessonName;
-        String lessonDuration = mValues.get(position).lessonDuration;
         if(tracker != null) {
             isSelected = tracker.isSelected((long)position);
         }
-        holder.bind(lessonName, lessonDuration, isSelected);
+        holder.bind(mValues.get(position).lessonName, mValues.get(position).lessonDuration, isSelected);
     }
 
     @Override

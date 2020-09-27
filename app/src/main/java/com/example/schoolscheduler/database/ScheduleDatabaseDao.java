@@ -11,35 +11,38 @@ import androidx.room.Update;
 import java.sql.Date;
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+
 @Dao
 public interface ScheduleDatabaseDao {
 
     @Insert
-    void insert(Lesson newLesson);
+    Completable insert(Lesson newLesson);
 
     @Update
-    void update(Lesson updateLesson);
+    Completable update(Lesson updateLesson);
 
     @Delete
-    void delete(Lesson deleteLesson);
+    Completable delete(Lesson deleteLesson);
 
     @Query("SELECT * FROM table_schedule WHERE lessonId == :id")
-    Lesson getLesson(int id);
+    Flowable<Lesson> getLesson(int id);
 
     @Query("SELECT * FROM table_schedule WHERE lessonDay == :day ")
-    LiveData<List<Lesson>> getLessonsForDay(String day);
+    Flowable<List<Lesson>> getLessonsForDay(String day);
 
     @Query("SELECT * FROM table_schedule WHERE lessonDuration = :period")
-    LiveData<List<Lesson>> getLessonsForPeriod(String period);
+    Flowable<List<Lesson>> getLessonsForPeriod(String period);
 
     @Query("SELECT name FROM table_equipment WHERE eqId == :id")
-    String getEqById(int id);
+    Flowable<String> getEqById(int id);
 
     @Transaction
     @Query("SELECT * FROM table_schedule")
-    List<LessonWithEquipment> getLessonsWithEquipment();
+    Flowable<List<LessonWithEquipment>> getLessonsWithEquipment();
 
     @Transaction
     @Query("SELECT * FROM table_equipment")
-    List<EquipmentWithLessons> getEquipmentWithLessons();
+    Flowable<List<EquipmentWithLessons>> getEquipmentWithLessons();
 }

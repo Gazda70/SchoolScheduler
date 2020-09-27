@@ -13,7 +13,8 @@
         <action
             android:id="@+id/action_sequentialScheduleFragment_to_dayManagementFragmentFragment"
             app:destination="@id/dayManagementFragmentFragment"
-            app:popUpTo="@id/sequentialScheduleFragment" />
+            app:popUpTo="@id/sequentialScheduleFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/tableFragmentSchedule"
@@ -23,7 +24,8 @@
         <action
             android:id="@+id/action_tableScheduleFragment_to_sequentialScheduleFragment"
             app:destination="@id/sequentialScheduleFragment"
-            app:popUpTo="@id/tableFragmentSchedule" />
+            app:popUpTo="@id/tableFragmentSchedule"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -32,11 +34,13 @@
         <action
             android:id="@+id/action_startFragment_to_tableScheduleFragment2"
             app:destination="@id/tableFragmentSchedule"
-            app:popUpTo="@id/startFragment" />
+            app:popUpTo="@id/startFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_startFragment_to_sequentialScheduleFragment"
             app:destination="@id/sequentialScheduleFragment"
-            app:popUpTo="@id/startFragment" />
+            app:popUpTo="@id/startFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/dayManagementFragmentFragment"
@@ -46,7 +50,8 @@
         <action
             android:id="@+id/action_dayManagementFragmentFragment_to_lessonManagementFragment2"
             app:destination="@id/lessonManagementFragment2"
-            app:popUpTo="@id/dayManagementFragmentFragment" />
+            app:popUpTo="@id/dayManagementFragmentFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/lessonManagementFragment2"

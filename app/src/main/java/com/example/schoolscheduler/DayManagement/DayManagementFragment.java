@@ -152,6 +152,10 @@ public class DayManagementFragment extends Fragment {
     }
 
     private void navigateToLessonManagementFragment(){
-            NavHostFragment.findNavController(this).navigate(R.id.action_dayManagementFragmentFragment_to_lessonManagementFragment2);
+        if( NavHostFragment.findNavController(this).getCurrentDestination().getId() == R.id.dayManagementFragmentFragment)
+        {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_dayManagementFragmentFragment_to_lessonManagementFragment2);
+        }
     }
 }
