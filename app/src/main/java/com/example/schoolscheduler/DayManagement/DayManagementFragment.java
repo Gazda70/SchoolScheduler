@@ -1,5 +1,6 @@
 package com.example.schoolscheduler.DayManagement;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +26,12 @@ import android.widget.Button;
 
 import com.example.schoolscheduler.R;
 import com.example.schoolscheduler.database.Lesson;
+import com.example.schoolscheduler.database.ScheduleDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A fragment representing a list of Items.
@@ -34,7 +43,7 @@ public class DayManagementFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    private ArrayList<Lesson> mValues = new ArrayList<>();
+    private List<Lesson> mValues;
 
     private DayManagementViewModel viewModel;
 
@@ -43,6 +52,8 @@ public class DayManagementFragment extends Fragment {
     private View view;
 
     private SelectionTracker<Long> tracker;
+
+    private String dayName;
     //TEMPORARY SOLUTION
     private int newLessonIndex;
 
@@ -71,6 +82,7 @@ public class DayManagementFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,9 +90,9 @@ public class DayManagementFragment extends Fragment {
 
         viewModel  = new ViewModelProvider(this).get(DayManagementViewModel.class);
 
-        adapter = new DayManagementFragmentRecyclerViewAdapter(mValues);
+        mValues = new ArrayList<Lesson>();
 
-        viewModel.getLessonsFromDatabase(mValues);
+        adapter = new DayManagementFragmentRecyclerViewAdapter(mValues);
 
         newLessonIndex = mValues.size() + 1;
 
@@ -94,7 +106,7 @@ public class DayManagementFragment extends Fragment {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     viewModel.setFalseAddLesson();
-                    addLesson();
+                    navigateToLessonManagementFragment();
                 }
             }
         };
@@ -115,6 +127,17 @@ public class DayManagementFragment extends Fragment {
             public void onSelectionChanged(){
                 navigateToLessonManagementFragment();}
         });
+
+        ScheduleDatabase.getInstance().scheduleDao().getLessonsForDay(dayName).observe(
+                getViewLifecycleOwner(), new Observer<List<Lesson>>()
+                {
+                    @Override
+                    public void onChanged(List<Lesson> lessons) {
+                        mValues = lessons;
+                    }
+                }
+        );
+
         return view;
     }
 
@@ -129,12 +152,6 @@ public class DayManagementFragment extends Fragment {
                         SelectionPredicates.<Long>createSelectAnything()
                 )
                 .build();
-    }
-
-    private void addLesson(){
-        mValues.add(new Lesson(newLessonIndex,"Geografia","Poniedziałek","13:40 - 14:25"));
-        adapter.notifyItemInserted(newLessonIndex);
-        newLessonIndex++;
     }
 
     private void setUpRecyclerView() {

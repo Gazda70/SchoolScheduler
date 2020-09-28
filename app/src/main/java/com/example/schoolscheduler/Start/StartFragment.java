@@ -106,6 +106,8 @@ public class StartFragment extends Fragment {
     }
 
     private void navigateToDays(){
-        NavHostFragment.findNavController(this).navigate(R.id.action_startFragment_to_sequentialScheduleFragment);
+        if( NavHostFragment.findNavController(this).getCurrentDestination().getId() == R.id.startFragment) {
+            NavHostFragment.findNavController(this).navigate(R.id.action_startFragment_to_sequentialScheduleFragment);
+        }
     }
 }

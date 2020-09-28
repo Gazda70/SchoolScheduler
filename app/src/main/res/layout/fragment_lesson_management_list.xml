@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/show_lesson"
@@ -10,37 +11,15 @@
     android:clickable="false"
     tools:context=".DayManagement.DayManagementFragment">
 
-    <TextView
-        android:id="@+id/equipment_description"
+    <Button
+        android:id="@+id/done_managing_lesson_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginEnd="@dimen/margin_32"
+        android:text="Done"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lesson_list" />
-
-    <TextView
-        android:id="@+id/lesson_duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="72dp"
-        android:text="8:00 - 8:45"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/lesson_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/lesson_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_64"
-        android:text="Matematyka"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/lesson_list"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/equipment_description" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lesson_list"
@@ -57,26 +36,70 @@
         tools:context=".DayManagement.DayManagementFragment"
         tools:listitem="@layout/day_fragment_item" />
 
-    <TextView
-        android:id="@+id/equipment_information"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Equipment"
-        android:hint="@string/enter_name_of_new_equipment_item"
-        app:layout_constraintBottom_toTopOf="@+id/lesson_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.84" />
-
     <Button
         android:id="@+id/add_equipment_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_32"
         android:text="ADD EQUIPMENT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/equipment_description" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lesson_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/margin_32"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lesson_name_inner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter lesson name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lesson_duration"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginEnd="@dimen/margin_32"
+        app:layout_constraintBottom_toTopOf="@+id/lesson_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lesson_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lesson_duration_inner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter lesson duration" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/equipment_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginEnd="@dimen/margin_32"
+        android:layout_marginBottom="@dimen/margin_96"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/equipment_description" />
+        app:layout_constraintTop_toBottomOf="@+id/lesson_list">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/equipment_description_inner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter equipment description" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

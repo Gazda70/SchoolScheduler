@@ -57,5 +57,11 @@
         android:id="@+id/lessonManagementFragment2"
         android:name="com.example.schoolscheduler.LessonManagement.LessonManagementFragment"
         android:label="fragment_lesson_management_list"
-        tools:layout="@layout/fragment_lesson_management_list" />
+        tools:layout="@layout/fragment_lesson_management_list" >
+        <action
+            android:id="@+id/action_lessonManagementFragment2_to_dayManagementFragmentFragment"
+            app:destination="@id/dayManagementFragmentFragment"
+            app:popUpTo="@id/lessonManagementFragment2"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

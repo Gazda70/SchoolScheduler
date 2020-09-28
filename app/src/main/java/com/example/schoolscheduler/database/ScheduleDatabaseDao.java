@@ -9,6 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -17,32 +18,35 @@ import io.reactivex.Flowable;
 @Dao
 public interface ScheduleDatabaseDao {
 
-    @Insert
-    Completable insert(Lesson newLesson);
+    @Query("INSERT INTO table_schedule VALUES (:lessonId,:lessonName,:lessonDay,:lessonDuration)")
+    void insert(int lessonId, String lessonName, String lessonDay, String lessonDuration);
 
     @Update
-    Completable update(Lesson updateLesson);
+    void update(Lesson updateLesson);
 
     @Delete
-    Completable delete(Lesson deleteLesson);
+    void delete(Lesson deleteLesson);
 
     @Query("SELECT * FROM table_schedule WHERE lessonId == :id")
-    Flowable<Lesson> getLesson(int id);
+    List<Lesson> getLesson(int id);
 
     @Query("SELECT * FROM table_schedule WHERE lessonDay == :day ")
-    Flowable<List<Lesson>> getLessonsForDay(String day);
+    LiveData<List<Lesson>> getLessonsForDay(String day);
 
     @Query("SELECT * FROM table_schedule WHERE lessonDuration = :period")
-    Flowable<List<Lesson>> getLessonsForPeriod(String period);
+    LiveData<List<Lesson>> getLessonsForPeriod(String period);
+
+    @Query("SELECT * FROM table_schedule WHERE lessonDuration = :period AND lessonDay == :day")
+    LiveData<List<Lesson>> getLessonsForPeriodAndDay(String day, String period);
 
     @Query("SELECT name FROM table_equipment WHERE eqId == :id")
-    Flowable<String> getEqById(int id);
+    LiveData<String> getEqById(int id);
 
     @Transaction
     @Query("SELECT * FROM table_schedule")
-    Flowable<List<LessonWithEquipment>> getLessonsWithEquipment();
+    LiveData<List<LessonWithEquipment>> getLessonsWithEquipment();
 
     @Transaction
     @Query("SELECT * FROM table_equipment")
-    Flowable<List<EquipmentWithLessons>> getEquipmentWithLessons();
+    LiveData<List<EquipmentWithLessons>> getEquipmentWithLessons();
 }

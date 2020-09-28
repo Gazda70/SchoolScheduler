@@ -1,5 +1,7 @@
 package com.example.schoolscheduler.DayManagement;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -9,6 +11,8 @@ import com.example.schoolscheduler.database.ScheduleDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.Flowable;
 
 public class DayManagementViewModel extends ViewModel {
 
@@ -27,8 +31,12 @@ public class DayManagementViewModel extends ViewModel {
         addLesson.setValue(false);
     }
 
-    public void getLessonsFromDatabase(ArrayList<Lesson> toPopulate){
-
-       // toPopulate.addAll(ScheduleDatabase.getInstance().scheduleDao().getLessonsForDay(dayName).);
+  /*  private void addLesson(String lessonName, String lessonDay, String lessonDuration){
+        addLessonToDatabase(newLessonIndex,lessonName, lessonDay,lessonDuration);
+        adapter.notifyItemInserted(newLessonIndex);
     }
+
+    public void addLessonToDatabase(int lessonId, String lessonName, String lessonDay, String lessonDuration){
+        ScheduleDatabase.getInstance().scheduleDao().insert(lessonId, lessonName, lessonDay, lessonDuration);
+    }*/
 }

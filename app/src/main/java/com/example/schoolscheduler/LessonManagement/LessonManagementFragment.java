@@ -3,9 +3,11 @@ package com.example.schoolscheduler.LessonManagement;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StorageStrategy;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +26,6 @@ import android.widget.Button;
 import com.example.schoolscheduler.R;
 import com.example.schoolscheduler.database.Equipment;
 import com.example.schoolscheduler.database.Lesson;
-
 
 import java.util.ArrayList;
 
@@ -46,7 +48,6 @@ public class LessonManagementFragment extends Fragment {
     private View view;
 
     private SelectionTracker<Long> tracker;
-
 
     //TEMPORARY SOLUTION
     private int newEqIndex;
@@ -92,6 +93,7 @@ public class LessonManagementFragment extends Fragment {
         newEqIndex = mValues.size() + 1;
 
         viewModel.getAddEquipment().setValue(false);
+        viewModel.getLessonEditionDone().setValue(false);
 
         setUpRecyclerView();
 
@@ -100,7 +102,7 @@ public class LessonManagementFragment extends Fragment {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
-                    viewModel.setFalseAddLesson();
+                    viewModel.setFalseAddEquipment();
                     addEquipment();
                 }
             }
@@ -108,12 +110,36 @@ public class LessonManagementFragment extends Fragment {
 
         viewModel.getAddEquipment().observe(getViewLifecycleOwner(), addLessonObserver);
 
-        Button addLessonButton = (Button)view.findViewById(R.id.add_equipment_button);
+        Button addEquipmentButton = (Button)view.findViewById(R.id.add_equipment_button);
         // update addLesson LiveData
-        addLessonButton.setOnClickListener(new View.OnClickListener() {
+        addEquipmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.setTrueAddLesson();
+                viewModel.setTrueAddEquipment();
+            }
+        });
+
+        //observe lessonEditionDone Live Data
+        final Observer<Boolean> lessonEditionDone = new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    viewModel.setFalseLessonEditionDone();
+                    navigateToDayManagementFragment();
+                }
+            }
+        };
+
+        viewModel.getLessonEditionDone().observe(getViewLifecycleOwner(), lessonEditionDone);
+
+        Button doneManagingLessonButton = (Button)view.findViewById(R.id.done_managing_lesson_button);
+
+        // update lessonEditionDone LiveData
+        doneManagingLessonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.setTrueLessonEditionDone();
+                Log.i("KLIKNIĘTO", "KONIEC EDYCJI LEKCJI");
             }
         });
 
@@ -151,5 +177,13 @@ public class LessonManagementFragment extends Fragment {
                         SelectionPredicates.<Long>createSelectAnything()
                 )
                 .build();
+    }
+
+    private void navigateToDayManagementFragment(){
+        if( NavHostFragment.findNavController(this).getCurrentDestination().getId() == R.id.lessonManagementFragment2)
+        {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_lessonManagementFragment2_to_dayManagementFragmentFragment);
+        }
     }
 }
