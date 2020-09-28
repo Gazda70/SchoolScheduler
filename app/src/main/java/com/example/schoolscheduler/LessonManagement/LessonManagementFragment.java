@@ -21,11 +21,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.example.schoolscheduler.R;
 import com.example.schoolscheduler.database.Equipment;
 import com.example.schoolscheduler.database.Lesson;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -51,6 +53,8 @@ public class LessonManagementFragment extends Fragment {
 
     //TEMPORARY SOLUTION
     private int newEqIndex;
+
+    private String actualEquipmentDesc;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -92,6 +96,8 @@ public class LessonManagementFragment extends Fragment {
 
         newEqIndex = mValues.size() + 1;
 
+        actualEquipmentDesc = "";
+
         viewModel.getAddEquipment().setValue(false);
         viewModel.getLessonEditionDone().setValue(false);
 
@@ -125,7 +131,7 @@ public class LessonManagementFragment extends Fragment {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     viewModel.setFalseLessonEditionDone();
-                    navigateToDayManagementFragment();
+                    onLessonEditionDone();
                 }
             }
         };
@@ -147,9 +153,11 @@ public class LessonManagementFragment extends Fragment {
         }
 
     private void addEquipment(){
-        mValues.add(new Equipment(newEqIndex,"Piórnik"));
-        adapter.notifyItemInserted(newEqIndex);
-        newEqIndex++;
+        if(checkEquipmentDescriptionField()) {
+            mValues.add(new Equipment(newEqIndex, actualEquipmentDesc));
+            adapter.notifyItemInserted(newEqIndex);
+            newEqIndex++;
+        }
     }
 
     private void setUpRecyclerView() {
@@ -184,6 +192,48 @@ public class LessonManagementFragment extends Fragment {
         {
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_lessonManagementFragment2_to_dayManagementFragmentFragment);
+        }
+    }
+
+    private boolean checkLessonNameField(){
+        TextInputEditText lessonName = (TextInputEditText)view.findViewById(R.id.lesson_name_inner);
+        boolean toReturn = false;
+        if(lessonName.getText().toString().matches("")){
+            Toast.makeText(getContext(), "You did not enter a lesson name", Toast.LENGTH_SHORT).show();
+        }else{
+            toReturn = true;
+        }
+        return toReturn;
+    }
+
+    private boolean checkLessonDurationField(){
+        TextInputEditText lessonDuration = (TextInputEditText)view.findViewById(R.id.lesson_duration_inner);
+        boolean toReturn = false;
+        if(lessonDuration.getText().toString().matches("")){
+            Toast.makeText(getContext(), "You did not enter lesson duration", Toast.LENGTH_SHORT).show();
+        }else{
+            toReturn = true;
+        }
+        return toReturn;
+    }
+
+    private boolean checkEquipmentDescriptionField(){
+        TextInputEditText equipmentDescription = (TextInputEditText)view.findViewById(R.id.equipment_description_inner);
+        boolean toReturn = false;
+        actualEquipmentDesc = equipmentDescription.getText().toString();
+        if(actualEquipmentDesc.matches("")){
+            Toast.makeText(getContext(), "You did not enter equipment descritpion", Toast.LENGTH_SHORT).show();
+        }else{
+            toReturn = true;
+        }
+        return toReturn;
+    }
+
+    private void onLessonEditionDone(){
+        boolean ifLessonName = checkLessonNameField();
+        boolean ifLessonDuration = checkLessonDurationField();
+        if(ifLessonName && ifLessonDuration){
+            navigateToDayManagementFragment();
         }
     }
 }
