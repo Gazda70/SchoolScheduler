@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +42,9 @@ public class SequentialScheduleRecyclerViewAdapter extends RecyclerView.Adapter<
        return mValues.indexOf(key);
    }
 
-    public SequentialScheduleRecyclerViewAdapter(List<String> items) {mValues = items;}
+    public SequentialScheduleRecyclerViewAdapter(List<String> items) {
+        this.mValues = items;
+    }
 
     @NonNull
     @Override
@@ -79,7 +83,6 @@ public class SequentialScheduleRecyclerViewAdapter extends RecyclerView.Adapter<
             super(view);
             dayNameField = (TextView) view.findViewById(R.id.editDayField);
         }
-
         @NonNull
         @Override
         public String toString() {

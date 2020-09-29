@@ -46,14 +46,15 @@ public class StartFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(StartViewModel.class);
 
 
-        mViewModel.getGoEdit().setValue(false);
-        mViewModel.getGoDays().setValue(false);
+        mViewModel.setFalseGoDays();
+        mViewModel.setFalseGoEdit();
 
         // observe goEdit LiveData
         final Observer<Boolean> goEditObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
+                    mViewModel.setFalseGoEdit();
                     navigateToSchedule();
                 }
             }
@@ -86,7 +87,6 @@ public class StartFragment extends Fragment {
         binding.daysButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("START", "GO DAYS");
                 mViewModel.setTrueGoDays();;
             }
         });
@@ -101,8 +101,9 @@ public class StartFragment extends Fragment {
     }
 
     private void navigateToSchedule(){
-        mViewModel.setFalseGoEdit();
-        NavHostFragment.findNavController(this).navigate(R.id.action_startFragment_to_tableScheduleFragment2);
+        if( NavHostFragment.findNavController(this).getCurrentDestination().getId() == R.id.startFragment) {
+            NavHostFragment.findNavController(this).navigate(R.id.action_startFragment_to_tableScheduleFragment2);
+        }
     }
 
     private void navigateToDays(){

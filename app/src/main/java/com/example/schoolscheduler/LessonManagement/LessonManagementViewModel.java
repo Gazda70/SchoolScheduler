@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 public class LessonManagementViewModel extends ViewModel {
 
+    public Lesson currentLesson;
+
     private MutableLiveData<Boolean> addEquipment;
     public MutableLiveData<Boolean> getAddEquipment() {
         if (addEquipment == null) {
@@ -19,10 +21,10 @@ public class LessonManagementViewModel extends ViewModel {
         return addEquipment;
     }
     public void setTrueAddEquipment(){
-        addEquipment.setValue(true);
+        getAddEquipment().setValue(true);
     }
     public void setFalseAddEquipment(){
-        addEquipment.setValue(false);
+        getAddEquipment().setValue(false);
     }
 
     private MutableLiveData<Boolean> lessonNameEntered;
@@ -32,10 +34,8 @@ public class LessonManagementViewModel extends ViewModel {
         }
         return lessonNameEntered;
     }
-    public void setTrueLessonNameEntered(){ lessonNameEntered.setValue(true); }
-    public void setFalseLessonNameEntered(){
-        lessonNameEntered.setValue(false);
-    }
+    public void setTrueLessonNameEntered(){ getLessonNameEntered().setValue(true); }
+    public void setFalseLessonNameEntered(){ getLessonNameEntered().setValue(false); }
 
     private MutableLiveData<Boolean> lessonDurationEntered;
     public MutableLiveData<Boolean> getLessonDurationEntered() {
@@ -44,10 +44,8 @@ public class LessonManagementViewModel extends ViewModel {
         }
         return lessonDurationEntered;
     }
-    public void setTrueLessonDurationEntered(){ lessonDurationEntered.setValue(true); }
-    public void setFalseLessonDurationEntered(){
-        lessonDurationEntered.setValue(false);
-    }
+    public void setTrueLessonDurationEntered(){ getLessonDurationEntered().setValue(true); }
+    public void setFalseLessonDurationEntered(){ getLessonDurationEntered().setValue(false); }
 
     private MutableLiveData<Boolean> lessonEditionDone;
     public MutableLiveData<Boolean> getLessonEditionDone() {
@@ -56,9 +54,9 @@ public class LessonManagementViewModel extends ViewModel {
         }
         return lessonEditionDone;
     }
-    public void setTrueLessonEditionDone(){ lessonEditionDone.setValue(true); }
+    public void setTrueLessonEditionDone(){ getLessonEditionDone().setValue(true); }
     public void setFalseLessonEditionDone(){
-        lessonEditionDone.setValue(false);
+        getLessonEditionDone().setValue(false);
     }
 
     public void getEquipmentFromDatabase(ArrayList<Equipment> toPopulate)

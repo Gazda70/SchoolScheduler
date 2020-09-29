@@ -25,18 +25,10 @@ public class DayManagementViewModel extends ViewModel {
         return addLesson;
     }
     public void setTrueAddLesson(){
-        addLesson.setValue(true);
+        getAddLesson().setValue(true);
     }
     public void setFalseAddLesson(){
-        addLesson.setValue(false);
+        getAddLesson().setValue(false);
     }
 
-  /*  private void addLesson(String lessonName, String lessonDay, String lessonDuration){
-        addLessonToDatabase(newLessonIndex,lessonName, lessonDay,lessonDuration);
-        adapter.notifyItemInserted(newLessonIndex);
-    }
-
-    public void addLessonToDatabase(int lessonId, String lessonName, String lessonDay, String lessonDuration){
-        ScheduleDatabase.getInstance().scheduleDao().insert(lessonId, lessonName, lessonDay, lessonDuration);
-    }*/
 }

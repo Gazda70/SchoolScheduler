@@ -25,25 +25,22 @@ import android.widget.Toast;
 
 
 import com.example.schoolscheduler.R;
+import com.example.schoolscheduler.SharedViewModels.DayManagementLessonManagementVM;
+import com.example.schoolscheduler.SharedViewModels.SequentialScheduleDayManagementVM;
 import com.example.schoolscheduler.database.Equipment;
 import com.example.schoolscheduler.database.Lesson;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
-/**
- * A fragment representing a list of Items.
- */
-public class LessonManagementFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+public class LessonManagementFragment extends Fragment {
 
     private ArrayList<Equipment> mValues = new ArrayList<>();
 
     private LessonManagementViewModel viewModel;
+
+    private DayManagementLessonManagementVM sharedVM;
 
     private LessonManagementRecyclerViewAdapter adapter;
 
@@ -56,36 +53,16 @@ public class LessonManagementFragment extends Fragment {
 
     private String actualEquipmentDesc;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public LessonManagementFragment() {
-    }
-
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static LessonManagementFragment newInstance(int columnCount) {
-        LessonManagementFragment fragment = new LessonManagementFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        sharedVM = new ViewModelProvider(requireActivity()).get(DayManagementLessonManagementVM.class);
+
         view = inflater.inflate(R.layout.fragment_lesson_management_list, container, false);
 
         adapter = new LessonManagementRecyclerViewAdapter(mValues);
@@ -98,13 +75,26 @@ public class LessonManagementFragment extends Fragment {
 
         actualEquipmentDesc = "";
 
-        viewModel.getAddEquipment().setValue(false);
-        viewModel.getLessonEditionDone().setValue(false);
+        viewModel.setFalseLessonEditionDone();
+        viewModel.setFalseAddEquipment();
+        viewModel.setFalseLessonNameEntered();
+        viewModel.setFalseLessonDurationEntered();
 
         setUpRecyclerView();
 
+        // observe chosenLesson LiveData
+        final Observer<Lesson> addLessonObserver = new Observer<Lesson>() {
+            @Override
+            public void onChanged(Lesson toDisplay) {
+                viewModel.currentLesson = toDisplay;
+                setLessonContentsFields();
+            }
+        };
+
+        sharedVM.getChosenLesson().observe(getViewLifecycleOwner(), addLessonObserver);
+
         // observe addEquipment LiveData
-        final Observer<Boolean> addLessonObserver = new Observer<Boolean>() {
+        final Observer<Boolean> addEquipmentObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
@@ -114,10 +104,10 @@ public class LessonManagementFragment extends Fragment {
             }
         };
 
-        viewModel.getAddEquipment().observe(getViewLifecycleOwner(), addLessonObserver);
+        viewModel.getAddEquipment().observe(getViewLifecycleOwner(), addEquipmentObserver);
 
         Button addEquipmentButton = (Button)view.findViewById(R.id.add_equipment_button);
-        // update addLesson LiveData
+        // update addEquipment LiveData
         addEquipmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,9 +135,9 @@ public class LessonManagementFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 viewModel.setTrueLessonEditionDone();
-                Log.i("KLIKNIĘTO", "KONIEC EDYCJI LEKCJI");
             }
         });
+
 
         return view;
         }
@@ -230,10 +220,15 @@ public class LessonManagementFragment extends Fragment {
     }
 
     private void onLessonEditionDone(){
-        boolean ifLessonName = checkLessonNameField();
-        boolean ifLessonDuration = checkLessonDurationField();
-        if(ifLessonName && ifLessonDuration){
+        if(checkLessonNameField() && checkLessonDurationField()){
             navigateToDayManagementFragment();
         }
+    }
+
+    private void setLessonContentsFields(){
+        TextInputEditText lessonName = (TextInputEditText)view.findViewById(R.id.lesson_name_inner);
+        TextInputEditText lessonDuration = (TextInputEditText)view.findViewById(R.id.lesson_duration_inner);
+        lessonName.setText(viewModel.currentLesson.lessonName);
+        lessonDuration.setText(viewModel.currentLesson.lessonDuration);
     }
 }

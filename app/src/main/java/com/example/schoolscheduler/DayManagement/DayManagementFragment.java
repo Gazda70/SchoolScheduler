@@ -22,26 +22,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.example.schoolscheduler.R;
+import com.example.schoolscheduler.SharedViewModels.DayManagementLessonManagementVM;
+import com.example.schoolscheduler.SharedViewModels.SequentialScheduleDayManagementVM;
 import com.example.schoolscheduler.database.Lesson;
 import com.example.schoolscheduler.database.ScheduleDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.schedulers.Schedulers;
-
-/**
- * A fragment representing a list of Items.
- */
 public class DayManagementFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private SequentialScheduleDayManagementVM sharedVMWithSS;
+
+    private DayManagementLessonManagementVM sharedVMWithLM;
 
     private List<Lesson> mValues;
 
@@ -52,40 +49,18 @@ public class DayManagementFragment extends Fragment {
     private View view;
 
     private SelectionTracker<Long> tracker;
-
-    private String dayName;
     //TEMPORARY SOLUTION
     private int newLessonIndex;
-
-
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public DayManagementFragment() {
-    }
-
-    public static DayManagementFragment newInstance(int columnCount) {
-        DayManagementFragment fragment = new DayManagementFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        sharedVMWithSS = new ViewModelProvider(requireActivity()).get(SequentialScheduleDayManagementVM.class);
+
+        sharedVMWithLM = new ViewModelProvider(requireActivity()).get(DayManagementLessonManagementVM .class);
+
         view = inflater.inflate(R.layout.day_fragment_item_list, container, false);
 
         viewModel  = new ViewModelProvider(this).get(DayManagementViewModel.class);
@@ -96,9 +71,19 @@ public class DayManagementFragment extends Fragment {
 
         newLessonIndex = mValues.size() + 1;
 
-        viewModel.getAddLesson().setValue(false);
+        viewModel.setFalseAddLesson();
 
         setUpRecyclerView();
+
+        //observe chosenDay LiveData
+        final Observer<String> chosenDayObserver = new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        sharedVMWithSS.getChosenDay().observe(getViewLifecycleOwner(), chosenDayObserver);
 
         // observe addLesson LiveData
         final Observer<Boolean> addLessonObserver = new Observer<Boolean>() {
@@ -128,15 +113,7 @@ public class DayManagementFragment extends Fragment {
                 navigateToLessonManagementFragment();}
         });
 
-        ScheduleDatabase.getInstance().scheduleDao().getLessonsForDay(dayName).observe(
-                getViewLifecycleOwner(), new Observer<List<Lesson>>()
-                {
-                    @Override
-                    public void onChanged(List<Lesson> lessons) {
-                        mValues = lessons;
-                    }
-                }
-        );
+
 
         return view;
     }

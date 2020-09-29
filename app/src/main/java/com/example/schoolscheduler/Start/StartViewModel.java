@@ -13,10 +13,10 @@ public class StartViewModel extends ViewModel {
         return goEdit;
     }
     public void setTrueGoEdit(){
-        goEdit.setValue(true);
+        getGoEdit().setValue(true);
     }
     public void setFalseGoEdit(){
-        goEdit.setValue(false);
+        getGoEdit().setValue(false);
     }
 
     private MutableLiveData<Boolean> goDays;
@@ -26,11 +26,9 @@ public class StartViewModel extends ViewModel {
         }
         return goDays;
     }
-    public void setTrueGoDays(){
-        goDays.setValue(true);
-    }
+    public void setTrueGoDays(){ getGoDays().setValue(true); }
     public void setFalseGoDays(){
-        goDays.setValue(false);
+        getGoDays().setValue(false);
     }
     // TODO: Implement the ViewModel
 }
