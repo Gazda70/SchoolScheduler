@@ -12,7 +12,7 @@ public class Equipment {
 
    public Equipment(int eqId,String name){this.eqId = eqId; this.name = name;}
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int eqId;
     @ColumnInfo
     public String name;

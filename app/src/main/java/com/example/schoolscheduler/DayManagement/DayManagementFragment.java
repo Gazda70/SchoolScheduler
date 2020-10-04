@@ -40,8 +40,6 @@ public class DayManagementFragment extends Fragment {
 
     private DayManagementLessonManagementVM sharedVMWithLM;
 
-    private List<Lesson> mValues;
-
     private DayManagementViewModel viewModel;
 
     private DayManagementFragmentRecyclerViewAdapter adapter;
@@ -61,17 +59,21 @@ public class DayManagementFragment extends Fragment {
 
         sharedVMWithLM = new ViewModelProvider(requireActivity()).get(DayManagementLessonManagementVM .class);
 
+        sharedVMWithLM.setWorkingOnExistingLesson(false);
+
         view = inflater.inflate(R.layout.day_fragment_item_list, container, false);
 
         viewModel  = new ViewModelProvider(this).get(DayManagementViewModel.class);
 
-        mValues = new ArrayList<Lesson>();
+        //możliwy problem z indeksami w recyclerview - primary key z bazy danych może nie być odpowiednim indeksem dla listy
+        adapter = new DayManagementFragmentRecyclerViewAdapter(new ArrayList<Lesson>());
 
-        adapter = new DayManagementFragmentRecyclerViewAdapter(mValues);
-
-        newLessonIndex = mValues.size() + 1;
+        viewModel.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel.setFalseAddLesson();
+
+        //możliwy problem z indeksami w recyclerview - primary key z bazy danych może nie być odpowiednim indeksem dla listy
+        adapter = new DayManagementFragmentRecyclerViewAdapter(viewModel.getMyLessons());
 
         setUpRecyclerView();
 
@@ -79,7 +81,8 @@ public class DayManagementFragment extends Fragment {
         final Observer<String> chosenDayObserver = new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+                viewModel.setCurrentDay(s);
+                viewModel.getLessonsFromDatabase(adapter);
             }
         };
 
@@ -91,7 +94,9 @@ public class DayManagementFragment extends Fragment {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     viewModel.setFalseAddLesson();
-                    navigateToLessonManagementFragment();
+                    setEmptyLessonAsChosenLesson();
+                    Log.i("ADD LESSON","TRIGGERED");
+                    //navigateToLessonManagementFragment();
                 }
             }
         };
@@ -110,9 +115,12 @@ public class DayManagementFragment extends Fragment {
         tracker.addObserver(new SelectionTracker.SelectionObserver<String>(){
             @Override
             public void onSelectionChanged(){
-                navigateToLessonManagementFragment();}
+               //sharedVMWithLM.setChosenLesson(tracker.getSelection().iterator().next());
+                sharedVMWithLM.setWorkingOnExistingLesson(true);
+                Log.i("UPDATE LESSON","TRIGGERED");
+               // navigateToLessonManagementFragment();}
+        }
         });
-
 
 
         return view;
@@ -145,6 +153,9 @@ public class DayManagementFragment extends Fragment {
 
     }
 
+    private void setEmptyLessonAsChosenLesson(){
+        sharedVMWithLM.setChosenLesson(new Lesson("",viewModel.getCurrentDay(),""));
+    }
     private void navigateToLessonManagementFragment(){
         if( NavHostFragment.findNavController(this).getCurrentDestination().getId() == R.id.dayManagementFragmentFragment)
         {

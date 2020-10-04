@@ -7,14 +7,13 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "table_schedule")
 public class Lesson {
 
-    public Lesson(int lessonId, String lessonName, String lessonDay, String lessonDuration){
-        this.lessonId = lessonId;
+    public Lesson(String lessonName, String lessonDay, String lessonDuration){
         this.lessonName = lessonName;
         this.lessonDay = lessonDay;
         this.lessonDuration = lessonDuration;
     }
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int lessonId;
 
     @ColumnInfo

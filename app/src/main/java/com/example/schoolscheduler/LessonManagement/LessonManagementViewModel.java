@@ -1,17 +1,48 @@
 package com.example.schoolscheduler.LessonManagement;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.example.schoolscheduler.database.Equipment;
 import com.example.schoolscheduler.database.Lesson;
+import com.example.schoolscheduler.database.LessonEquipmentCrossRef;
 import com.example.schoolscheduler.database.ScheduleDatabase;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LessonManagementViewModel extends ViewModel {
 
-    public Lesson currentLesson;
+    private Lesson currentLesson;
+
+    public Lesson getCurrentLesson() {
+        return currentLesson;
+    }
+
+    public void setCurrentLesson(Lesson currentLesson) {
+        this.currentLesson = currentLesson;
+    }
+
+    private List<Equipment> myEquipment;
+
+    private List<Equipment> temporaryEquipment;
+
+    private LifecycleOwner myLifecycleOwner;
+
+    public void setMyLifecycleOwner(LifecycleOwner myOwner){this.myLifecycleOwner = myOwner;}
+
+    public List<Equipment> getMyEquipment(){
+        if(this.myEquipment == null) {
+            this.myEquipment = Collections.emptyList();
+        }
+        return this.myEquipment;
+    };
 
     private MutableLiveData<Boolean> addEquipment;
     public MutableLiveData<Boolean> getAddEquipment() {
@@ -59,14 +90,36 @@ public class LessonManagementViewModel extends ViewModel {
         getLessonEditionDone().setValue(false);
     }
 
-    public void getEquipmentFromDatabase(ArrayList<Equipment> toPopulate)
+    public void getEquipmentFromDatabase()
     {
-        //ScheduleDatabase.getInstance().scheduleDao()
-        if(toPopulate.isEmpty())
-        {
-            toPopulate.add(new Equipment(1, "Książka"));
-                    toPopulate.add(new Equipment(2, "Zeszyt"));
-                            toPopulate.add(new Equipment(3, "Linijka"));
-        }
+        final Observer<List<LessonEquipmentCrossRef>> crossRefObserver = new Observer<List<LessonEquipmentCrossRef>>() {
+            @Override
+            public void onChanged(List<LessonEquipmentCrossRef> lessonEquipmentCrossRef) {
+                for(int i = 0; i < lessonEquipmentCrossRef.size(); i++){
+                    getEquipment(lessonEquipmentCrossRef.get(i).eqId);
+                }
+                myEquipment = temporaryEquipment;
+            }
+
+         };
+        ScheduleDatabase.getInstance().scheduleDao().getLessonEqCrossRefForLessonId(currentLesson.lessonId).observe(myLifecycleOwner, crossRefObserver);
+    }
+
+
+    private void getEquipment(int eqId){
+
+        final Observer<Equipment> eqObserver = new Observer<Equipment>() {
+            @Override
+            public void onChanged(Equipment lessonEquipment) {
+                temporaryEquipment.add(lessonEquipment);
+            }
+
+        };
+        ScheduleDatabase.getInstance().scheduleDao().getEqById(eqId).observe(myLifecycleOwner, eqObserver);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void insertLesson(){
+        new InsertAsyncTask(currentLesson).execute(currentLesson);
     }
 }

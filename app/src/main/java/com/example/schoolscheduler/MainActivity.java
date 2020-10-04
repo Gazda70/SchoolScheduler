@@ -24,13 +24,11 @@ public class MainActivity extends AppCompatActivity{
                     .commitNow();
 
         }
+
         ApplicationContextHolder.setHeldApplicationContext(this);
         scheduleDatabase = Room.databaseBuilder(getApplicationContext(),
-                ScheduleDatabase.class, "scheduleDatabase").build();
+                ScheduleDatabase.class, "scheduleDatabase").fallbackToDestructiveMigration().build();
 
     }
 
-    public ScheduleDatabase getScheduleDatabase() {
-        return scheduleDatabase;
-    }
 }

@@ -27,11 +27,11 @@ import java.util.List;
  */
 public class LessonManagementRecyclerViewAdapter extends RecyclerView.Adapter<LessonManagementRecyclerViewAdapter.EquipmentViewHolder> {
 
-    private ArrayList<Equipment> mValues;
+    private List<Equipment> mValues;
 
     private SelectionTracker<Long> tracker;
 
-    public LessonManagementRecyclerViewAdapter(ArrayList<Equipment> items) {
+    public LessonManagementRecyclerViewAdapter(List<Equipment> items) {
         setHasStableIds(false);
         mValues = items;
     }

@@ -63,7 +63,6 @@ public class SequentialScheduleFragment extends Fragment {
         tracker.addObserver(new SelectionTracker.SelectionObserver<String>(){
             @Override
             public void onSelectionChanged(){
-               Log.i("TRACKER GOT:", tracker.getSelection().iterator().next());
                 sharedVM.setChosenDay(tracker.getSelection().iterator().next());
                 navigateToDayManagementFragment();
 

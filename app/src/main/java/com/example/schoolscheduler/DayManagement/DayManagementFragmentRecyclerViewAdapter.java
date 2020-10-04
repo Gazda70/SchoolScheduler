@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapter<DayManagementFragmentRecyclerViewAdapter.LessonsViewHolder> {
 
-    private final List<Lesson> mValues;
+    private  List<Lesson> mValues;
 
     private SelectionTracker<Long> tracker;
 
@@ -35,6 +35,10 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
         super();
         this.mValues = toAssign;
         setHasStableIds(true);
+    }
+
+    public void setItems(List<Lesson> toAssign){
+        this.mValues = toAssign;
     }
 
     @Override

@@ -10,11 +10,20 @@ public class DayManagementLessonManagementVM extends ViewModel {
     private MutableLiveData<Lesson> chosenLesson;
     public MutableLiveData<Lesson> getChosenLesson() {
         if (chosenLesson == null) {
-            chosenLesson = new MutableLiveData<Lesson>();
+            chosenLesson = new MutableLiveData<>();
         }
         return chosenLesson;
     }
     public void setChosenLesson(Lesson newLesson){
         getChosenLesson().setValue(newLesson);
     }
+
+    private MutableLiveData<Boolean> workingOnExistingLesson;
+    public MutableLiveData<Boolean> getWorkingOnExistingLesson(){
+        if (workingOnExistingLesson == null) {
+            workingOnExistingLesson = new MutableLiveData<>();
+        }
+        return workingOnExistingLesson;
+    }
+    public void setWorkingOnExistingLesson(Boolean toAssign){getWorkingOnExistingLesson().setValue(toAssign);}
 }
