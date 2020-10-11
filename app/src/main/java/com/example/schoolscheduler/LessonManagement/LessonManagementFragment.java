@@ -42,7 +42,7 @@ public class LessonManagementFragment extends Fragment {
 
     private LessonManagementViewModel viewModel;
 
-    private DayManagementLessonManagementVM sharedVM;
+    private DayManagementLessonManagementVM sharedVMWithDM;
 
     private LessonManagementRecyclerViewAdapter adapter;
 
@@ -62,7 +62,7 @@ public class LessonManagementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        sharedVM = new ViewModelProvider(requireActivity()).get(DayManagementLessonManagementVM.class);
+        sharedVMWithDM = new ViewModelProvider(requireActivity()).get(DayManagementLessonManagementVM.class);
 
         view = inflater.inflate(R.layout.fragment_lesson_management_list, container, false);
 
@@ -84,13 +84,14 @@ public class LessonManagementFragment extends Fragment {
             }
         };
 
-        sharedVM.getChosenLesson().observe(getViewLifecycleOwner(), addLessonObserver);
+        sharedVMWithDM.getChosenLesson().observe(getViewLifecycleOwner(), addLessonObserver);
 
         adapter = new LessonManagementRecyclerViewAdapter(viewModel.getMyEquipment());
 
         setUpRecyclerView();
 
-        // observe workingOnExistingLesson LiveData
+     /*   ZMIANA NA ZWYKŁĄ ZMIENNA boolean
+     // observe workingOnExistingLesson LiveData
         final Observer<Boolean> workingOnExistingLessonObserver = new Observer<Boolean>(){
 
             @Override
@@ -101,7 +102,7 @@ public class LessonManagementFragment extends Fragment {
             }
         };
 
-        sharedVM.getWorkingOnExistingLesson().observe(getViewLifecycleOwner(), workingOnExistingLessonObserver);
+        sharedVM.getWorkingOnExistingLesson().observe(getViewLifecycleOwner(), workingOnExistingLessonObserver);*/
 
         // observe lessonNameEntered LiveData
         final Observer<Boolean> lessonNameEnteredObserver = new Observer<Boolean>() {
@@ -236,6 +237,7 @@ public class LessonManagementFragment extends Fragment {
             Toast.makeText(getContext(), "You did not enter a lesson name", Toast.LENGTH_SHORT).show();
         }else{
             toReturn = true;
+            viewModel.getCurrentLesson().lessonName = lessonName.getText().toString();
         }
         return toReturn;
     }
@@ -247,6 +249,7 @@ public class LessonManagementFragment extends Fragment {
             Toast.makeText(getContext(), "You did not enter lesson duration", Toast.LENGTH_SHORT).show();
         }else{
             toReturn = true;
+            viewModel.getCurrentLesson().lessonDuration = lessonDuration.getText().toString();
         }
         return toReturn;
     }
@@ -263,9 +266,17 @@ public class LessonManagementFragment extends Fragment {
         return toReturn;
     }
 
-    private void onLessonEditionDone(){
-        if(checkLessonNameField() && checkLessonDurationField()){
-            viewModel.insertLesson();
+    private void onLessonEditionDone() {
+        if (checkLessonNameField() && checkLessonDurationField()) {
+            Log.i("GOTTEN LESSON name", viewModel.getCurrentLesson().lessonName);
+            Log.i("GOTTEN LESSON DURATION", viewModel.getCurrentLesson().lessonDuration);
+            if (sharedVMWithDM.getWorkingOnExistingLesson()) {
+                Log.i("ASYNC UPDATE", "UPDATING");
+                viewModel.updateLesson();
+                sharedVMWithDM.setWorkingOnExistingLesson(false);
+            } else {
+                viewModel.insertLesson();
+            }
             navigateToDayManagementFragment();
         }
     }
@@ -286,4 +297,5 @@ public class LessonManagementFragment extends Fragment {
         TextInputEditText lessonDuration = (TextInputEditText)view.findViewById(R.id.lesson_duration_inner);
         return lessonDuration.getText().toString();
     }
+
 }

@@ -60,8 +60,6 @@
         tools:layout="@layout/fragment_lesson_management_list" >
         <action
             android:id="@+id/action_lessonManagementFragment2_to_dayManagementFragmentFragment"
-            app:destination="@id/dayManagementFragmentFragment"
-            app:popUpTo="@id/lessonManagementFragment2"
-            app:popUpToInclusive="false" />
+            app:destination="@id/dayManagementFragmentFragment" />
     </fragment>
 </navigation>

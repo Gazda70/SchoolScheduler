@@ -18,8 +18,6 @@ import io.reactivex.Flowable;
 @Dao
 public interface ScheduleDatabaseDao {
 
- /*   @Query("INSERT INTO table_schedule VALUES (:lessonName, :lessonDay, :lessonDuration)")
-    void insertLesson(String lessonName,String lessonDay, String lessonDuration);*/
     @Insert
     void insertLesson(Lesson toInsert);
     @Insert
@@ -29,11 +27,12 @@ public interface ScheduleDatabaseDao {
     void insertLessonEquipmentCrossRef(LessonEquipmentCrossRef insertLECR);
 
     @Update
-    void update(Lesson updateLesson);
+    void updateLesson(Lesson updateLesson);
 
     @Delete
-    void delete(Lesson deleteLesson);
+    void deleteLesson(Lesson deleteLesson);
 
+    //LESSON QUERIES
     @Query("SELECT * FROM table_schedule WHERE lessonName == :lessonName " +
             "AND lessonDay == :lessonDay AND lessonDuration == :lessonDuration")
     Lesson getLesson(String lessonName, String lessonDay, String lessonDuration);
@@ -42,28 +41,32 @@ public interface ScheduleDatabaseDao {
     List<Lesson> getLessonsForDay(String day);
 
     @Query("SELECT * FROM table_schedule WHERE lessonDuration = :period")
-    LiveData<List<Lesson>> getLessonsForPeriod(String period);
+    List<Lesson> getLessonsForPeriod(String period);
+
+   @Query("SELECT * FROM table_schedule WHERE lessonDuration = :period AND lessonName = :name")
+   List<Lesson> getLessonsForNameAndDay(String name, String period);
 
     @Query("SELECT * FROM table_schedule WHERE lessonDuration = :period AND lessonDay == :day")
-    LiveData<List<Lesson>> getLessonsForPeriodAndDay(String day, String period);
+    List<Lesson> getLessonsForPeriodAndDay(String day, String period);
 
+   @Query("SELECT * FROM table_schedule")
+   List<Lesson> testGetAllLessons();
+
+
+
+   //EQUIPMENT QUERIES
     @Query("SELECT * FROM table_equipment WHERE eqId == :id")
-    LiveData<Equipment> getEqById(int id);
+    Equipment getEqById(int id);
 
     @Query("SELECT * FROM lesson_equipment_cross_ref WHERE lessonId = :lessonId")
-    LiveData<List<LessonEquipmentCrossRef>> getLessonEqCrossRefForLessonId(int lessonId);
+    List<LessonEquipmentCrossRef> getLessonEqCrossRefForLessonId(int lessonId);
 
     @Transaction
     @Query("SELECT * FROM table_schedule WHERE lessonDay = :day")
-    LiveData<List<LessonWithEquipment>> getLessonsWithEquipmentForDay(String day);
-
+    List<LessonWithEquipment> getLessonsWithEquipmentForDay(String day);
 
     @Transaction
     @Query("SELECT * FROM table_equipment")
-    LiveData<List<EquipmentWithLessons>> getEquipmentWithLessons();
-
-
-    @Query("SELECT * FROM table_schedule")
-    List<Lesson> testGetAllLessons();
+    List<EquipmentWithLessons> getEquipmentWithLessons();
 
 }

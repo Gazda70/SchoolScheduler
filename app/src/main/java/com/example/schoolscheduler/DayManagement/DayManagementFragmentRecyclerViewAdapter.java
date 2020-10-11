@@ -50,6 +50,16 @@ public class DayManagementFragmentRecyclerViewAdapter extends RecyclerView.Adapt
         tracker = newTracker;
     }
 
+    public Lesson getItemById(Long id){
+        int iter = 0;
+        Lesson toReturn = mValues.get(iter);
+        while(toReturn.lessonId != id && iter < mValues.size()) {
+           toReturn =  mValues.get(iter);
+           iter++;
+        }
+        return toReturn;
+}
+
     @Override
     public LessonsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())

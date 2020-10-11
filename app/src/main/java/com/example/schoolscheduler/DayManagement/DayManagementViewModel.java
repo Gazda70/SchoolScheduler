@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Flowable;
 
@@ -74,6 +75,9 @@ public class DayManagementViewModel extends ViewModel {
             Log.i("VIEW MODEL", "MAM NAZWĘ DNIA");
             new GetLessonsAsyncTask(currentDay, adapter).execute();
         }
+        for(int i = 0; i < myLessons.size(); i++){
+            Log.i("DURATION OF LESSON NO:" + i, myLessons.get(i).lessonDuration);
+        }
     }
 
     private  class GetLessonsAsyncTask extends AsyncTask<String , Void, List<Lesson>> {
@@ -96,20 +100,8 @@ public class DayManagementViewModel extends ViewModel {
 
         @Override
         protected void onPostExecute(List<Lesson> result) {
-              Log.i("GET LESSONS ASYNC TASK", "SEE THIS CONTENT:");
-              if(this.mDay != null)
-              {
-                  Log.i("FOR DAY:", this.mDay);
-              }else{
-                  Log.i("GET LESSONS ASYNC TASK:", "NAWET NIE MA NAZWY DNIA");
-              }
-                for (int i = 0; i < result.size(); i++) {
-                Log.i("IN DATABASE:", result.get(i).lessonName);
-                Log.i("HAVING INDEX:", "" + result.get(i).lessonId);
-                Log.i("FOR DAY:", result.get(i).lessonDay);
-            }
             mAdapter.setItems(result);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(0,result.size());
         }
     }
 }

@@ -31,12 +31,6 @@ public class LessonManagementViewModel extends ViewModel {
 
     private List<Equipment> myEquipment;
 
-    private List<Equipment> temporaryEquipment;
-
-    private LifecycleOwner myLifecycleOwner;
-
-    public void setMyLifecycleOwner(LifecycleOwner myOwner){this.myLifecycleOwner = myOwner;}
-
     public List<Equipment> getMyEquipment(){
         if(this.myEquipment == null) {
             this.myEquipment = Collections.emptyList();
@@ -90,7 +84,7 @@ public class LessonManagementViewModel extends ViewModel {
         getLessonEditionDone().setValue(false);
     }
 
-    public void getEquipmentFromDatabase()
+ /*   public void getEquipmentFromDatabase()
     {
         final Observer<List<LessonEquipmentCrossRef>> crossRefObserver = new Observer<List<LessonEquipmentCrossRef>>() {
             @Override
@@ -102,7 +96,7 @@ public class LessonManagementViewModel extends ViewModel {
             }
 
          };
-        ScheduleDatabase.getInstance().scheduleDao().getLessonEqCrossRefForLessonId(currentLesson.lessonId).observe(myLifecycleOwner, crossRefObserver);
+      //  ScheduleDatabase.getInstance().scheduleDao().getLessonEqCrossRefForLessonId(currentLesson.lessonId).observe(myLifecycleOwner, crossRefObserver);
     }
 
 
@@ -115,11 +109,56 @@ public class LessonManagementViewModel extends ViewModel {
             }
 
         };
-        ScheduleDatabase.getInstance().scheduleDao().getEqById(eqId).observe(myLifecycleOwner, eqObserver);
-    }
+   //     ScheduleDatabase.getInstance().scheduleDao().getEqById(eqId).observe(myLifecycleOwner, eqObserver);
+    }*/
 
     @SuppressLint("StaticFieldLeak")
     public void insertLesson(){
         new InsertAsyncTask(currentLesson).execute(currentLesson);
+    }
+
+    private class InsertAsyncTask extends AsyncTask<Lesson, Void, Void> {
+
+        private Lesson toInsert;
+
+        InsertAsyncTask(Lesson toInsert){
+            this.toInsert = toInsert;
+        };
+
+        @Override
+        protected Void doInBackground(Lesson... lessons) {
+            ScheduleDatabase.getInstance().scheduleDao().insertLesson(toInsert);
+            Log.i("INSERT ASYNC TASK", "INSERTING LESSON");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.i("ASYNC TASK", "FINISHED");
+        }
+    }
+
+    public void updateLesson(){
+        new UpdateAsyncTask(currentLesson).execute();
+    }
+
+    private class UpdateAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private Lesson toUpdate;
+
+        UpdateAsyncTask(Lesson toUpdate){
+            this.toUpdate = toUpdate;
+        };
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ScheduleDatabase.getInstance().scheduleDao().updateLesson(toUpdate);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.i("ASYNC TASK", "FINISHED");
+        }
     }
 }

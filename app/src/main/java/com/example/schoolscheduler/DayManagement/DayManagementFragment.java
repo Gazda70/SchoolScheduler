@@ -65,14 +65,10 @@ public class DayManagementFragment extends Fragment {
 
         viewModel  = new ViewModelProvider(this).get(DayManagementViewModel.class);
 
-        //możliwy problem z indeksami w recyclerview - primary key z bazy danych może nie być odpowiednim indeksem dla listy
-        adapter = new DayManagementFragmentRecyclerViewAdapter(new ArrayList<Lesson>());
-
         viewModel.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel.setFalseAddLesson();
 
-        //możliwy problem z indeksami w recyclerview - primary key z bazy danych może nie być odpowiednim indeksem dla listy
         adapter = new DayManagementFragmentRecyclerViewAdapter(viewModel.getMyLessons());
 
         setUpRecyclerView();
@@ -96,7 +92,7 @@ public class DayManagementFragment extends Fragment {
                     viewModel.setFalseAddLesson();
                     setEmptyLessonAsChosenLesson();
                     Log.i("ADD LESSON","TRIGGERED");
-                    //navigateToLessonManagementFragment();
+                    navigateToLessonManagementFragment();
                 }
             }
         };
@@ -112,13 +108,17 @@ public class DayManagementFragment extends Fragment {
             }
         });
 
-        tracker.addObserver(new SelectionTracker.SelectionObserver<String>(){
+        tracker.addObserver(new SelectionTracker.SelectionObserver<Long>(){
             @Override
             public void onSelectionChanged(){
-               //sharedVMWithLM.setChosenLesson(tracker.getSelection().iterator().next());
-                sharedVMWithLM.setWorkingOnExistingLesson(true);
                 Log.i("UPDATE LESSON","TRIGGERED");
-               // navigateToLessonManagementFragment();}
+                if(!tracker.getSelection().isEmpty())
+                {
+                    navigateToLessonManagementFragment();
+                    sharedVMWithLM.setWorkingOnExistingLesson(true);
+                    sharedVMWithLM.setChosenLesson(adapter.getItemById(tracker.getSelection().iterator().next()));
+                   Log.i("UPDATE LESSON:",tracker.getSelection().iterator().next().toString());
+                }
         }
         });
 
